@@ -1,10 +1,10 @@
 /*
 CSC139 
-Spring 2023
+Fall 2024
 First Assignment
-Last Name, First Name
-Section #
-OSs Tested on: such as Linux, Mac, etc.
+Gupta, Rahul
+Section #5
+OSs Tested on: Linux
 */
 
 #include <stdio.h>
@@ -38,7 +38,7 @@ int ReadAtBufIndex(int);
 
 int main()
 {
-    const char *name = "OS_HW1_yourName"; // Name of shared memory block to be passed to shm_open
+    const char *name = "OS_HW1_rahulGupta"; // Name of shared memory block to be passed to shm_open
     int bufSize; // Bounded buffer size
     int itemCnt; // Number of items to be consumed
     int in; // Index of next item to produce
@@ -49,12 +49,19 @@ int main()
      // **Extremely Important: map the shared memory block for both reading and writing 
      // Use PROT_READ | PROT_WRITE
 
+     int fd;
+     fd = shm_open(name,O_CREAT | O_RDWR,0666);
+     ftruncate(fd, SHM_SIZE);
+     gShmPtr = mmap(0, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
 
      // Write code here to read the four integers from the header of the shared memory block 
      // These are: bufSize, itemCnt, in, out
      // Just call the functions provided below like this:
      bufSize = GetBufSize();
+     itemCnt = GetItemCnt();
+     in  = GetIn();
+     out = GetOut();
 	
      // Write code here to check that the consumer has read the right values: 
      printf("Consumer reading: bufSize = %d\n",bufSize);

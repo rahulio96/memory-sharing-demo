@@ -1,10 +1,10 @@
 /*
 CSC139 
-Spring 2023
+Fall 2024
 First Assignment
-Last Name, First Name
-Section #
-OSs Tested on: such as Linux, Mac, etc.
+Gupta, Rahul
+Section #5
+OSs Tested on: Linux
 */
 
 #include <stdio.h>
@@ -101,12 +101,17 @@ void InitShm(int bufSize, int itemCnt)
      // Use the above name.
      // **Extremely Important: map the shared memory block for both reading and writing 
      // Use PROT_READ | PROT_WRITE
+     int fd;
+     fd = shm_open(name,O_CREAT | O_RDWR,0666);
+     ftruncate(fd, SHM_SIZE);
+     gShmPtr = mmap(0, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 	
     // Write code here to set the values of the four integers in the header
     // Just call the functions provided below, like this
-    SetBufSize(bufSize); 	
-       
-	   
+    SetBufSize(bufSize);
+    SetItemCnt(itemCnt);
+    SetIn(in);
+    SetOut(out); 	   
 }
 
 void Producer(int bufSize, int itemCnt, int randSeed)
@@ -117,6 +122,13 @@ void Producer(int bufSize, int itemCnt, int randSeed)
     srand(randSeed);
 
     // Write code here to produce itemCnt integer values in the range [0-3000]
+    for (int i = 0; i < itemCnt; i++)
+    {
+        int val = GetRand(0, 3000);
+        printf("Producing Item %d with value %d at Index %d\n", i, val, in);
+        WriteAtBufIndex(in, val);
+        SetIn((in + 1) % bufSize);
+    }
     // Use the functions provided below to get/set the values of shared variables "in" and "out"
     // Use the provided function WriteAtBufIndex() to write into the bounded buffer 	
     // Use the provided function GetRand() to generate a random number in the specified range
@@ -169,6 +181,8 @@ int GetHeaderVal(int i)
 void SetHeaderVal(int i, int val)
 {
        // Write the implementation
+       void* ptr = gShmPtr + i*sizeof(int);
+       *((int*)ptr) = val;
 
 }
 
