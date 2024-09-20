@@ -73,7 +73,18 @@ int main()
      // Use the following print statement to report the consumption of an item:
      // printf("Consuming Item %d with value %d at Index %d\n", i, val, out);
      // where i is the item number, val is the item value, out is its index in the bounded buffer
-                
+     for (int i = 0; i < itemCnt; i++)
+     {
+        while (in == out) {
+                in = GetIn();
+                out = GetOut();
+        }
+
+        int val = ReadAtBufIndex(out);
+        printf("Consuming Item %d with value %d at Index %d\n", i, val, out);
+        SetOut((out + 1) % bufSize);
+        out = GetOut();
+     }         
           
      // remove the shared memory segment 
      if (shm_unlink(name) == -1) {
@@ -112,7 +123,6 @@ void SetHeaderVal(int i, int val)
         // Write the implementation
         void* ptr = gShmPtr + i*sizeof(int);
         memcpy(ptr, &val, sizeof(int));
-        printf("SETHEADER i:%d, val:%d\n", i, val);
 
 }
 
@@ -153,6 +163,9 @@ void WriteAtBufIndex(int indx, int val)
 int ReadAtBufIndex(int indx)
 {
         // Write the implementation
- 
+        int val;
+        void* ptr = gShmPtr + 4*sizeof(int) + indx*sizeof(int);
+        memcpy(&val, ptr, sizeof(int));
+        return val;
 }
 

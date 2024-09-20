@@ -124,6 +124,11 @@ void Producer(int bufSize, int itemCnt, int randSeed)
     // Write code here to produce itemCnt integer values in the range [0-3000]
     for (int i = 0; i < itemCnt; i++)
     {
+        while (((in + 1) % bufSize) == out) {
+                in = GetIn();
+                out = GetOut();
+        }
+
         int val = GetRand(0, 3000);
         printf("Producing Item %d with value %d at Index %d\n", i, val, in);
         WriteAtBufIndex(in, val);
@@ -184,7 +189,6 @@ void SetHeaderVal(int i, int val)
        // Write the implementation
        void* ptr = gShmPtr + i*sizeof(int);
        memcpy(ptr, &val, sizeof(int));
-       printf("SETHEADER i:%d, val:%d\n", i, val);
 
 }
 
