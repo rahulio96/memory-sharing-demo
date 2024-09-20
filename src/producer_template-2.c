@@ -60,6 +60,15 @@ int main(int argc, char* argv[])
 	randSeed = atoi(argv[3]);
 	
 	// Write code to check the validity of the command-line arguments
+        if (bufSize < 2 || bufSize > 600) {
+                printf("Buffer size must be between 2 and 600\n");
+                exit(1);
+        }
+
+        if (itemCnt <= 0) {
+                printf("Item count must be greater than 0\n");
+                exit(1);
+        }
 
         // Function that creates a shared memory segment and initializes its header
         InitShm(bufSize, itemCnt);        
