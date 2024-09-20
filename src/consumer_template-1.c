@@ -110,6 +110,9 @@ int GetHeaderVal(int i)
 void SetHeaderVal(int i, int val)
 {
         // Write the implementation
+        void* ptr = gShmPtr + i*sizeof(int);
+        memcpy(ptr, &val, sizeof(int));
+        printf("SETHEADER i:%d, val:%d\n", i, val);
 
 }
 

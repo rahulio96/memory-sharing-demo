@@ -95,7 +95,7 @@ void InitShm(int bufSize, int itemCnt)
 {
     int in = 0;
     int out = 0;
-    const char *name = "OS_HW1_yourName"; // Name of shared memory object to be passed to shm_open
+    const char *name = "OS_HW1_rahulGupta"; // Name of shared memory object to be passed to shm_open
 
      // Write code here to create a shared memory block and map it to gShmPtr  
      // Use the above name.
@@ -128,6 +128,7 @@ void Producer(int bufSize, int itemCnt, int randSeed)
         printf("Producing Item %d with value %d at Index %d\n", i, val, in);
         WriteAtBufIndex(in, val);
         SetIn((in + 1) % bufSize);
+        in = GetIn();
     }
     // Use the functions provided below to get/set the values of shared variables "in" and "out"
     // Use the provided function WriteAtBufIndex() to write into the bounded buffer 	
@@ -182,7 +183,8 @@ void SetHeaderVal(int i, int val)
 {
        // Write the implementation
        void* ptr = gShmPtr + i*sizeof(int);
-       *((int*)ptr) = val;
+       memcpy(ptr, &val, sizeof(int));
+       printf("SETHEADER i:%d, val:%d\n", i, val);
 
 }
 
@@ -223,6 +225,10 @@ void WriteAtBufIndex(int indx, int val)
 int ReadAtBufIndex(int indx)
 {
         // Write the implementation
+        int val;
+        void* ptr = gShmPtr + 4*sizeof(int) + indx*sizeof(int);
+        memcpy(&val, ptr, sizeof(int));
+        return val;
  
 }
 
