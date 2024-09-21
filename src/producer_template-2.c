@@ -133,6 +133,10 @@ void Producer(int bufSize, int itemCnt, int randSeed)
     // Write code here to produce itemCnt integer values in the range [0-3000]
     for (int i = 0; i < itemCnt; i++)
     {
+        in = GetIn();
+        out = GetOut();
+
+        // wait on consumer to make space
         while (((in + 1) % bufSize) == out) {
                 in = GetIn();
                 out = GetOut();
@@ -142,7 +146,6 @@ void Producer(int bufSize, int itemCnt, int randSeed)
         printf("Producing Item %d with value %d at Index %d\n", i, val, in);
         WriteAtBufIndex(in, val);
         SetIn((in + 1) % bufSize);
-        in = GetIn();
     }
     // Use the functions provided below to get/set the values of shared variables "in" and "out"
     // Use the provided function WriteAtBufIndex() to write into the bounded buffer 	

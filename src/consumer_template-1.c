@@ -75,6 +75,10 @@ int main()
      // where i is the item number, val is the item value, out is its index in the bounded buffer
      for (int i = 0; i < itemCnt; i++)
      {
+        in = GetIn();
+        out = GetOut();
+
+        // wait for producer
         while (in == out) {
                 in = GetIn();
                 out = GetOut();
@@ -83,7 +87,6 @@ int main()
         int val = ReadAtBufIndex(out);
         printf("Consuming Item %d with value %d at Index %d\n", i, val, out);
         SetOut((out + 1) % bufSize);
-        out = GetOut();
      }         
           
      // remove the shared memory segment 
