@@ -48,7 +48,6 @@ int main()
      // Use the above name
      // **Extremely Important: map the shared memory block for both reading and writing 
      // Use PROT_READ | PROT_WRITE
-
      int fd;
      fd = shm_open(name,O_CREAT | O_RDWR,0666);
      ftruncate(fd, SHM_SIZE);
@@ -67,29 +66,29 @@ int main()
      printf("Consumer reading: bufSize = %d\n",bufSize);
 
      // Write code here to consume all the items produced by the producer
-     // Use the functions provided below to get/set the values of shared variables in, out, bufSize
-     // Use the provided function ReadAtBufIndex() to read from the bounded buffer 	
-     // **Extremely Important: Remember to set the value of any shared variable you change locally
-     // Use the following print statement to report the consumption of an item:
-     // printf("Consuming Item %d with value %d at Index %d\n", i, val, out);
-     // where i is the item number, val is the item value, out is its index in the bounded buffer
      for (int i = 0; i < itemCnt; i++)
      {
+        // Use the functions provided below to get/set the values of shared variables in, out, bufSize
+        // **Extremely Important: Remember to set the value of any shared variable you change locally
         in = GetIn();
         out = GetOut();
 
-        // wait for producer
+        // Wait for producer
         while (in == out) {
                 in = GetIn();
                 out = GetOut();
         }
-
+        
+        // Use the provided function ReadAtBufIndex() to read from the bounded buffer
         int val = ReadAtBufIndex(out);
+
+        // Use the following print statement to report the consumption of an item
+        // where i is the item number, val is the item value, out is its index in the bounded buffer
         printf("Consuming Item %d with value %d at Index %d\n", i, val, out);
         SetOut((out + 1) % bufSize);
      }         
           
-     // remove the shared memory segment 
+     // Remove the shared memory segment 
      if (shm_unlink(name) == -1) {
 	printf("Error removing %s\n",name);
 	exit(-1);

@@ -133,6 +133,8 @@ void Producer(int bufSize, int itemCnt, int randSeed)
     // Write code here to produce itemCnt integer values in the range [0-3000]
     for (int i = 0; i < itemCnt; i++)
     {
+        // Use the functions provided below to get/set the values of shared variables "in" and "out"
+        // **Extremely Important: Remember to set the value of any shared variable you change locally
         in = GetIn();
         out = GetOut();
 
@@ -142,22 +144,17 @@ void Producer(int bufSize, int itemCnt, int randSeed)
                 out = GetOut();
         }
 
+        // Use the provided function GetRand() to generate a random number in the specified range
         int val = GetRand(0, 3000);
+
+        // Use the following print statement to report the production of an item
+        // where i is the item number, val is the item value, in is its index in the bounded buffer:
         printf("Producing Item %d with value %d at Index %d\n", i, val, in);
+
+        // Use the provided function WriteAtBufIndex() to write into the bounded buffer 	
         WriteAtBufIndex(in, val);
         SetIn((in + 1) % bufSize);
     }
-    // Use the functions provided below to get/set the values of shared variables "in" and "out"
-    // Use the provided function WriteAtBufIndex() to write into the bounded buffer 	
-    // Use the provided function GetRand() to generate a random number in the specified range
-    // **Extremely Important: Remember to set the value of any shared variable you change locally
-    // Use the following print statement to report the production of an item:
-    // printf("Producing Item %d with value %d at Index %d\n", i, val, in);
-    // where i is the item number, val is the item value, in is its index in the bounded buffer
-    	
-	
-	
-	
     
      printf("Producer Completed\n");
 }
