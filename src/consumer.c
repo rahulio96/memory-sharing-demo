@@ -62,7 +62,8 @@ int main() {
     out = GetOut();
 
     // Write code here to check that the consumer has read the right values:
-    printf("Consumer reading: bufSize = %d\n", bufSize);
+    printf("Consumer reading: bufSize = %d, itemCnt = %d, in = %d, out = %d\n",
+           bufSize, itemCnt, in, out);
 
     // Write code here to consume all the items produced by the producer
     for (int i = 0; i < itemCnt; i++) {
